@@ -3,7 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - echo "REACT_APP_BASE_URL=https://music-ai-discovery-backend-production.up.railway.app" >> .env
+        - echo "VITE_APP_BASE_URL=https://music-ai-discovery-backend-production.up.railway.app" >> .env
     build:
       commands:
         - npm install
