@@ -31,7 +31,10 @@ function App() {
           property="og:description"
           content="Get AI-powered music recommendations instantly. Enter your favorite songs or genres and explore new tracks!"
         />
-        <meta property="og:image" content="%PUBLIC_URL%/preview-image.jpg" />
+        <meta
+          property="og:image"
+          content="https://www.trackdiscov.com/preview-image.jpg"
+        />
         <meta property="og:url" content="https://www.trackdiscov.com/" />
         <link rel="canonical" href="https://www.trackdiscov.com/" />
       </Helmet>
