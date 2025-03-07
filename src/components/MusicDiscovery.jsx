@@ -106,7 +106,7 @@ const MusicDiscovery = () => {
                 }`}
               >
                 {" "}
-                + Add Track
+                + Add
               </button>
             )}
             {/* Only Show Remove Button if More Than 1 Track */}
@@ -115,7 +115,7 @@ const MusicDiscovery = () => {
                 onClick={() => setTracks(tracks.slice(0, -1))}
                 className="px-4 py-2 rounded-md transition bg-red-600 text-white hover:bg-red-500"
               >
-                - Remove Track
+                - Remove
               </button>
             )}
           </div>
