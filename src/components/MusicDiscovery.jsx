@@ -240,7 +240,7 @@ const MusicDiscovery = () => {
                       </h4>
 
                       {/* Artist Name & Spotify Button in One Line */}
-                      <div className="flex items-center justify-between mt-1">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-1">
                         <p className="text-sm text-gray-800 dark:text-[#E2E8F0] flex items-center">
                           🎤 {rec.artist}
                         </p>
@@ -248,8 +248,8 @@ const MusicDiscovery = () => {
                           href={generateSpotifyLink(rec.song, rec.artist)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center px-3 py-1 text-white rounded-md transition 
-      bg-gray-800 hover:bg-gray-700 dark:bg-[#4C51BF] dark:hover:bg-[#3C40A0] dark:text-white"
+                          className="mt-2 sm:mt-0 px-3 py-1 text-white rounded-md transition 
+    bg-gray-800 hover:bg-gray-700 dark:bg-[#4C51BF] dark:hover:bg-[#3C40A0] dark:text-white flex items-center justify-center w-fit"
                         >
                           <img
                             src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg"
@@ -259,7 +259,6 @@ const MusicDiscovery = () => {
                           Listen
                         </a>
                       </div>
-
                       {/* Song Description */}
                       <p className="mt-2 text-gray-800 dark:text-[#E2E8F0]">
                         {rec.description}
