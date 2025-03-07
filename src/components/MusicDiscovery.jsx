@@ -59,13 +59,20 @@ const MusicDiscovery = () => {
     setLoading(false);
   };
 
+  // 🔥 Generate Spotify Search Link
+  const generateSpotifyLink = (song, artist) => {
+    const query = encodeURIComponent(`${song} ${artist}`);
+    return `https://open.spotify.com/search/${query}`;
+  };
+
   return (
     <div className="space-y-6 flex flex-col">
       <div className="flex-grow">
         {/* User Inputs */}
         <div className="space-y-4">
           <label className="block text-lg font-semibold text-gray-700 dark:text-[#A3BFFA]">
-            Enter up to 10 Tracks/Artist (Track - Artist or Track or Artist):
+            Enter up to 10 Tracks/Artist or Mood (Track - Artist or Track or
+            Artist or sad mood):
           </label>
           {tracks.map((track, index) => (
             <input
@@ -183,7 +190,7 @@ const MusicDiscovery = () => {
                     d="M4 12a8 8 0 0116 0H4z"
                   ></path>
                 </svg>
-                Discoving...
+                Finding Tracks...
               </>
             ) : (
               "🎶 Discov It!"
@@ -227,13 +234,34 @@ const MusicDiscovery = () => {
                       key={index}
                       className="bg-gray-300 dark:bg-[#2D3748] p-4 rounded-md shadow-sm"
                     >
-                      <h4 className="text-lg font-semibold  text-gray-900 dark:text-[#4C51BF]">
+                      {/* Song Title */}
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-[#4C51BF]">
                         {rec.song}
                       </h4>
-                      <p className="text-sm text-gray-800 dark:text-[#E2E8F0]">
-                        🎤 {rec.artist}
-                      </p>
-                      <p className="text-gray-800 dark:text-[#E2E8F0]">
+
+                      {/* Artist Name & Spotify Button in One Line */}
+                      <div className="flex items-center justify-between mt-1">
+                        <p className="text-sm text-gray-800 dark:text-[#E2E8F0] flex items-center">
+                          🎤 {rec.artist}
+                        </p>
+                        <a
+                          href={generateSpotifyLink(rec.song, rec.artist)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center px-3 py-1 text-white rounded-md transition 
+      bg-gray-800 hover:bg-gray-700 dark:bg-[#4C51BF] dark:hover:bg-[#3C40A0] dark:text-white"
+                        >
+                          <img
+                            src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg"
+                            alt="Spotify"
+                            className="w-4 h-4 mr-2"
+                          />
+                          Listen
+                        </a>
+                      </div>
+
+                      {/* Song Description */}
+                      <p className="mt-2 text-gray-800 dark:text-[#E2E8F0]">
                         {rec.description}
                       </p>
                     </div>
