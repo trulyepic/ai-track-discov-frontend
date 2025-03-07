@@ -4,7 +4,7 @@ import { formatRecommendations } from "../utils/formatRecommendations";
 
 const MusicDiscovery = () => {
   const [genre, setGenre] = useState("");
-  const [numRecommendations, setNumRecommendations] = useState(3);
+  const [numRecommendations, setNumRecommendations] = useState("");
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,6 +34,12 @@ const MusicDiscovery = () => {
     setError("");
     setData(null);
     setLoading(true);
+
+    if (!numRecommendations) {
+      setError("⚠️ Please enter the number of tracks.");
+      setLoading(false);
+      return;
+    }
 
     let result;
     if (tracks.some((track) => track.trim())) {
@@ -176,11 +182,12 @@ const MusicDiscovery = () => {
           <input
             type="number"
             value={numRecommendations}
-            onChange={(e) =>
+            onChange={(e) => {
+              const value = e.target.value;
               setNumRecommendations(
-                Math.max(1, Math.min(30, Number(e.target.value)))
-              )
-            }
+                value === "" ? "" : Math.max(1, Math.min(30, Number(value)))
+              );
+            }}
             min="1"
             max="30"
             c
