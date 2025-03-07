@@ -9,6 +9,7 @@ const MusicDiscovery = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [tracks, setTracks] = useState([""]);
+  const [trackId] = useState(null);
 
   // 🔥 Function to process and extract the correct keys dynamically
   //   const processData = (apiData, genre) => {
@@ -63,18 +64,22 @@ const MusicDiscovery = () => {
     const query = encodeURIComponent(`${song} ${artist}`);
     const url = `https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`;
 
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer YOUR_SPOTIFY_ACCESS_TOKEN`,
-      },
-    });
+    try {
+      const response = await fetch(url, {
+        headers: {
+          Authorization: `Bearer YOUR_SPOTIFY_ACCESS_TOKEN`, // Replace with your actual token
+        },
+      });
 
-    const data = await response.json();
-    if (data.tracks && data.tracks.items.length > 0) {
-      return data.tracks.items[0].id; // Returns the track ID
+      const data = await response.json();
+      if (data.tracks && data.tracks.items.length > 0) {
+        return data.tracks.items[0].id; // Returns the Spotify Track ID
+      }
+    } catch (error) {
+      console.error("Error fetching track ID:", error);
     }
 
-    return null;
+    return null; // Return null if no track is found
   };
 
   // 🔥 Generate Spotify Search Link
@@ -271,33 +276,63 @@ const MusicDiscovery = () => {
                         <p className="text-sm text-gray-800 dark:text-[#E2E8F0] flex items-center">
                           🎤 {rec.artist}
                         </p>
-                        <a
-                          href="#"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={async (e) => {
-                            e.preventDefault();
-                            const trackUrl = await generateSpotifyLink(
-                              rec.song,
-                              rec.artist
-                            );
-                            window.open(trackUrl, "_blank");
-                          }}
-                          className="px-3 py-1 text-white rounded-md transition 
+
+                        <div className="flex gap-2">
+                          {/* <button
+                            onClick={async () => {
+                              const trackIdResult = await getSpotifyTrackId(
+                                rec.song,
+                                rec.artist
+                              );
+                              setTrackId(trackIdResult); // Save the Track ID to the state
+                            }}
+                            className="px-3 py-1 text-white rounded-md transition 
+  bg-gray-800 hover:bg-gray-700 dark:bg-[#4C51BF] dark:hover:bg-[#3C40A0] dark:text-white flex items-center justify-center"
+                          >
+                            ▶ Play It
+                          </button> */}
+
+                          <a
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={async (e) => {
+                              e.preventDefault();
+                              const trackUrl = await generateSpotifyLink(
+                                rec.song,
+                                rec.artist
+                              );
+                              window.open(trackUrl, "_blank");
+                            }}
+                            className="px-3 py-1 text-white rounded-md transition 
   bg-gray-800 hover:bg-gray-700 dark:bg-[#4C51BF] dark:hover:bg-[#3C40A0] dark:text-white flex items-center justify-center w-fit"
-                        >
-                          <img
-                            src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg"
-                            alt="Spotify"
-                            className="w-4 h-4 mr-2"
-                          />
-                          Listen
-                        </a>
+                          >
+                            <img
+                              src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg"
+                              alt="Spotify"
+                              className="w-4 h-4 mr-2"
+                            />
+                            Listen
+                          </a>
+                        </div>
                       </div>
                       {/* Song Description */}
                       <p className="mt-2 text-gray-800 dark:text-[#E2E8F0]">
                         {rec.description}
                       </p>
+                      {/* Spotify Embedded Player (Only Shows When "Play It" is Clicked) */}
+                      {trackId && (
+                        <div className="mt-4">
+                          <iframe
+                            src={`https://open.spotify.com/embed/track/${trackId}`}
+                            width="100%"
+                            height="80"
+                            frameBorder="0"
+                            allow="encrypted-media"
+                            className="rounded-md"
+                          ></iframe>
+                        </div>
+                      )}
                     </div>
                   ))
                 ) : (
