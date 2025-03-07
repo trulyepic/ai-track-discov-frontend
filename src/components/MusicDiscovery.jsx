@@ -59,10 +59,37 @@ const MusicDiscovery = () => {
     setLoading(false);
   };
 
-  // 🔥 Generate Spotify Search Link
-  const generateSpotifyLink = (song, artist) => {
+  const getSpotifyTrackId = async (song, artist) => {
     const query = encodeURIComponent(`${song} ${artist}`);
-    return `https://open.spotify.com/search/${query}`;
+    const url = `https://api.spotify.com/v1/search?q=${query}&type=track&limit=1`;
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer YOUR_SPOTIFY_ACCESS_TOKEN`,
+      },
+    });
+
+    const data = await response.json();
+    if (data.tracks && data.tracks.items.length > 0) {
+      return data.tracks.items[0].id; // Returns the track ID
+    }
+
+    return null;
+  };
+
+  // 🔥 Generate Spotify Search Link
+  // const generateSpotifyLink = (song, artist) => {
+  //   const query = encodeURIComponent(`${song} ${artist}`);
+  //   return `https://open.spotify.com/search/${query}`;
+  // };
+
+  const generateSpotifyLink = async (song, artist) => {
+    const trackId = await getSpotifyTrackId(song, artist);
+    return trackId
+      ? `https://open.spotify.com/track/${trackId}`
+      : `https://open.spotify.com/search/${encodeURIComponent(
+          song + " " + artist
+        )}`;
   };
 
   return (
@@ -245,11 +272,19 @@ const MusicDiscovery = () => {
                           🎤 {rec.artist}
                         </p>
                         <a
-                          href={generateSpotifyLink(rec.song, rec.artist)}
+                          href="#"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="mt-2 sm:mt-0 px-3 py-1 text-white rounded-md transition 
-    bg-gray-800 hover:bg-gray-700 dark:bg-[#4C51BF] dark:hover:bg-[#3C40A0] dark:text-white flex items-center justify-center w-fit"
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            const trackUrl = await generateSpotifyLink(
+                              rec.song,
+                              rec.artist
+                            );
+                            window.open(trackUrl, "_blank");
+                          }}
+                          className="px-3 py-1 text-white rounded-md transition 
+  bg-gray-800 hover:bg-gray-700 dark:bg-[#4C51BF] dark:hover:bg-[#3C40A0] dark:text-white flex items-center justify-center w-fit"
                         >
                           <img
                             src="https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg"
